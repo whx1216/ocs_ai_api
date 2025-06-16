@@ -6,29 +6,29 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    exit(json_encode(['success' => false, 'message' => '仅支持POST请求']));
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+    echo json_encode(['success' => false, 'message' => '仅支持POST请求']);
+    exit;
 }
 
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!$input || !isset($input['config'])) {
-    http_response_code(400);
-    exit(json_encode(['success' => false, 'message' => '未提供配置数据']));
+    echo json_encode(['success' => false, 'message' => '未提供配置数据']);
+    exit;
 }
 
 try {
-    $config = Config::getInstance();
-    $decryptedConfig = $config->decrypt($input['config']);
+    // 解密配置
+    $decryptedConfig = decryptConfig($input['config']);
 
     if (!$decryptedConfig) {
-        http_response_code(400);
-        exit(json_encode(['success' => false, 'message' => '配置解密失败，请检查配置是否正确']));
+        echo json_encode(['success' => false, 'message' => '配置解密失败，请检查配置是否正确']);
+        exit;
     }
 
     echo json_encode([
@@ -36,9 +36,9 @@ try {
         'config' => $decryptedConfig
     ]);
 } catch (Exception $e) {
-    http_response_code(500);
     echo json_encode([
         'success' => false,
         'message' => '解密过程发生错误: ' . $e->getMessage()
     ]);
 }
+?>
