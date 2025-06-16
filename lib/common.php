@@ -86,17 +86,56 @@ function buildPrompt($question, $options, $type) {
 }
 
 // 处理答案格式
-function processAnswer($answer, $type) {
+function processAnswer($answer, $type, $options = '') {
     $answer = trim($answer);
 
-    if ($type === 'multiple' && strpos($answer, '#') === false) {
-        preg_match_all('/[A-F]/i', $answer, $matches);
-        if (!empty($matches[0])) {
-            $answer = implode('#', array_unique(array_map('strtoupper', $matches[0])));
+    if ($type === 'multiple') {
+        // 如果答案是纯选项字母(如 A B D)
+        if (preg_match('/^[A-F\s]+$/i', $answer)) {
+            // 将选项文字提取出来
+            $optionsArray = parseOptions($options);
+            $letters = preg_split('/\s+/', $answer);
+            $fullAnswers = [];
+
+            foreach ($letters as $letter) {
+                $letter = strtoupper(trim($letter));
+                if (isset($optionsArray[$letter])) {
+                    $fullAnswers[] = $optionsArray[$letter];
+                }
+            }
+
+            if (!empty($fullAnswers)) {
+                $answer = implode('#', $fullAnswers);
+            }
+        }
+        // 如果答案中没有分隔符,尝试提取选项内容
+        else if (strpos($answer, '#') === false) {
+            $parts = preg_split('/[,，、\s]+/', $answer);
+            if (count($parts) > 1) {
+                $answer = implode('#', array_unique($parts));
+            }
         }
     }
 
     return $answer;
+}
+
+function parseOptions($options) {
+    $result = [];
+    if (empty($options)) return $result;
+
+    // 按行分割选项
+    $lines = explode("\n", $options);
+    foreach ($lines as $line) {
+        // 匹配选项字母和内容 (如 A:选项内容 或 A.选项内容)
+        if (preg_match('/^([A-F])[\.:](.+)$/i', trim($line), $matches)) {
+            $letter = strtoupper($matches[1]);
+            $content = trim($matches[2]);
+            $result[$letter] = $content;
+        }
+    }
+
+    return $result;
 }
 
 // OpenAI API调用 - 支持多模型轮询
@@ -116,7 +155,12 @@ function callOpenAI($prompt, $modelIndex = 0) {
         'messages' => [
             [
                 'role' => 'system',
-                'content' => '你是一个专业的考试答题助手。请直接回答答案，不要解释。选择题只回答选项的内容(如：地球)；多选题用#号分隔答案,只回答选项的内容(如中国#世界#地球)；判断题只回答: 正确/对/true/√ 或 错误/错/false/×；填空题直接给出答案。'
+                'content' => '你是一个专业的考试答题助手。请按以下格式回答:
+                - 单选题: 直接回答完整的选项内容(如: "地球"而不是"A")
+                - 多选题: 用#号分隔多个完整的选项内容(如: "太阳#月球#地球"而不是"A B C")
+                - 判断题: 只回答 正确/对/true/√ 或 错误/错/false/×
+                - 填空题: 直接给出答案
+                请只回答答案,不要包含任何解释。'
             ],
             [
                 'role' => 'user',
