@@ -1,0 +1,406 @@
+/* QuizMind AI 自定义样式 */
+
+/* 全局宽度约束 */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+/* 防止任何元素突破视口宽度 */
+pre, code, .code-block {
+    max-width: 100% !important;
+    overflow-wrap: break-word !important;
+    word-break: break-all !important;
+}
+
+/* 基础样式 */
+[un-cloak] { display: none; }
+
+/* 动画 */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.scroll-indicator {
+    animation: bounce 2s infinite;
+}
+
+/* 渐变背景 */
+.gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-success {
+    background: linear-gradient(135deg, #48c774 0%, #3ec46d 100%);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* 玻璃态效果 */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 网格背景 */
+.bg-grid-gray-100\/\[0\.03\] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(0 0 0 / 0.03)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+}
+
+.dark .bg-grid-white\/\[0\.03\] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.03)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+}
+
+/* 代码块样式 - 彻底修复宽度溢出问题 */
+.code-block, pre {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+/* 强制约束代码块容器 */
+#ocs-config-display {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: auto;
+    display: block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+/* 强制约束所有相关容器 */
+#ocs-config-card {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#ocs-config-card * {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#ocs-config-card .relative {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#ocs-config-card .overflow-x-auto {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* 确保主容器也被约束 */
+.container {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+#main-content {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+#main-content .grid {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+#main-content .grid > div {
+    max-width: 100%;
+    overflow: hidden;
+    min-width: 0;
+}
+
+/* 行内代码 */
+.inline-code {
+    background: #e5e7eb;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.875em;
+}
+
+.dark .inline-code {
+    background: #374151;
+}
+
+/* 题型标签保持单行 */
+.type-badge {
+    white-space: nowrap;
+    display: inline-block;
+}
+
+/* Hero区域高度优化 */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 文档页面目录固定 */
+@media (min-width: 1024px) {
+    .toc {
+        position: sticky;
+        top: 5rem;
+        max-height: calc(100vh - 6rem);
+        overflow-y: auto;
+    }
+}
+
+.toc::-webkit-scrollbar {
+    width: 4px;
+}
+
+.toc::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 2px;
+}
+
+.dark .toc::-webkit-scrollbar-thumb {
+    background: #4b5563;
+}
+
+/* 视频教程样式 */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background: #000;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* 步骤卡片 */
+.step-card {
+    position: relative;
+    padding-left: 3rem;
+}
+
+.step-card::before {
+    content: attr(data-step);
+    position: absolute;
+    left: 0;
+    top: 0.25rem;
+    width: 2rem;
+    height: 2rem;
+    background: #7c3aed;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* DataTables 自定义样式 */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    color: #4b5563;
+}
+
+.dark .dataTables_wrapper .dataTables_length,
+.dark .dataTables_wrapper .dataTables_filter,
+.dark .dataTables_wrapper .dataTables_info,
+.dark .dataTables_wrapper .dataTables_paginate {
+    color: #d1d5db;
+}
+
+/* 专门的移动端处理 */
+@media (max-width: 1024px) {
+    #ocs-config-card {
+        max-width: calc(100vw - 2rem);
+        margin-left: auto;
+        margin-right: auto;
+        overflow: hidden;
+    }
+
+    #ocs-config-card .p-6 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    #ocs-config-display {
+        max-width: calc(100vw - 4rem);
+        font-size: 0.75rem;
+        padding: 0.75rem;
+    }
+
+    .code-block, pre {
+        font-size: 0.75rem;
+        padding: 0.75rem;
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .hero-section {
+        min-height: auto;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    #ocs-config-card {
+        max-width: calc(100vw - 1rem);
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+        border-radius: 0.5rem;
+        overflow: visible;
+    }
+
+    #ocs-config-display {
+        max-width: calc(100vw - 2rem);
+        font-size: 0.7rem;
+        line-height: 1.4;
+    }
+
+    #ocs-config-card > div {
+        overflow: visible;
+    }
+}
+
+@media (max-width: 480px) {
+    #ocs-config-card {
+        max-width: 100vw;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        border-radius: 0;
+    }
+
+    #ocs-config-display {
+        max-width: calc(100vw - 1rem);
+        font-size: 0.65rem;
+        line-height: 1.3;
+        padding: 0.5rem;
+    }
+}
+
+/* 滚动条样式 */
+.code-block::-webkit-scrollbar {
+    height: 6px;
+}
+
+.code-block::-webkit-scrollbar-track {
+    background: #0f172a;
+    border-radius: 3px;
+}
+
+.code-block::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 3px;
+}
+
+.code-block::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* 确保滚动条在暗色模式下可见 */
+.dark .code-block::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+.dark .code-block::-webkit-scrollbar-thumb {
+    background: #64748b;
+}
+
+/* 添加滚动提示 */
+.overflow-x-auto {
+    position: relative;
+}
+
+.overflow-x-auto:hover {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* 修复按钮点击问题 */
+.hero-section a {
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+/* 确保导航栏链接可点击 */
+nav a {
+    position: relative;
+    z-index: 50;
+    pointer-events: auto;
+}
+
+/* 修复移动端按钮问题 */
+@media (max-width: 768px) {
+    .hero-section {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-section a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        touch-action: manipulation;
+    }
+}
